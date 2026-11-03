@@ -4,7 +4,7 @@ import {
   createLinkHandler,
   redirectHandler,
 } from "./serverless/handlers.js";
-import type { LinkStore } from "./serverless/store.js";
+import { createSqliteStore, type LinkStore } from "./serverless/sqlite-store.js";
 
 function createResponse() {
   const result: {
@@ -107,5 +107,21 @@ describe("Vercel link API handlers", () => {
     const analyticsResponse = createResponse();
     await analyticsHandler(request, analyticsResponse.response, store);
     expect(analyticsResponse.result.body).toEqual({ total: 3 });
+  });
+
+  it("persists links and clicks through the SQLite adapter", async () => {
+    const store = await createSqliteStore(":memory:");
+    try {
+      expect(await store.createLink("abc123", "https://example.com", new Date().toISOString())).toBe(true);
+      expect(await store.createLink("abc123", "https://duplicate.test", new Date().toISOString())).toBe(false);
+      expect(await store.getDestination("abc123")).toBe("https://example.com");
+      expect(await store.getClickCount("abc123")).toBe(0);
+      expect(await store.getClickCount("missing")).toBeNull();
+
+      await store.recordClick("abc123", new Date().toISOString(), "test-agent", null);
+      expect(await store.getClickCount("abc123")).toBe(1);
+    } finally {
+      await store.close();
+    }
   });
 });

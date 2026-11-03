@@ -4,7 +4,7 @@ import {
   createLinkHandler,
   redirectHandler,
 } from "../serverless/handlers.js";
-import { createNeonStore } from "../serverless/store.js";
+import { getServerlessStore } from "../serverless/sqlite-store.js";
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
   const route = request.query.route;
@@ -15,7 +15,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
   }
 
   try {
-    const store = await createNeonStore();
+    const store = await getServerlessStore();
     const apiRequest = {
       method: request.method,
       body: request.body,
@@ -32,6 +32,6 @@ export default async function handler(request: VercelRequest, response: VercelRe
     return await redirectHandler(apiRequest, response, store);
   } catch (error) {
     console.error("Could not initialize link service", error);
-    return response.status(500).json({ error: "The link service is not configured" });
+    return response.status(500).json({ error: "Could not initialize the SQLite database" });
   }
 }

@@ -1,6 +1,6 @@
 import { randomInt } from "node:crypto";
 import type { IncomingHttpHeaders } from "node:http";
-import type { LinkStore } from "./store.js";
+import type { LinkStore } from "./sqlite-store.js";
 
 interface ApiRequest {
   method?: string;
@@ -66,7 +66,7 @@ export async function createLinkHandler(
 
   const publicBaseUrl = process.env.PUBLIC_BASE_URL?.trim().replace(/\/+$/, "");
   if (!publicBaseUrl) {
-    return response.status(500).json({ error: "The link service is not configured" });
+    return response.status(500).json({ error: "PUBLIC_BASE_URL is not configured" });
   }
 
   try {
