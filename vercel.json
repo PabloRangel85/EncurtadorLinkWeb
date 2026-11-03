@@ -1,4 +1,18 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/client"
+  "outputDirectory": "dist/client",
+  "rewrites": [
+    {
+      "source": "/api/links/:slug/analytics",
+      "destination": "/api?route=analytics&slug=:slug"
+    },
+    {
+      "source": "/api/links",
+      "destination": "/api?route=create"
+    },
+    {
+      "source": "/r/:slug",
+      "destination": "/api?route=redirect&slug=:slug"
+    }
+  ]
 }

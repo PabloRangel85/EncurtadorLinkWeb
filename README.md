@@ -19,6 +19,17 @@ Open the Vite dashboard at `http://localhost:5173`. The API and native redirects
 
 For a production build, run `npm run build` followed by `npm start`. Fastify serves the built interface and API from the same origin.
 
+## Deploy on Vercel
+
+The Vercel deployment serves the Vite interface and runs the API routes in `api/` as serverless functions. Link storage and click analytics use Neon PostgreSQL; the schema is initialized automatically on the first API request.
+
+Create a Neon database and add these environment variables to the Vercel project for Production (and Preview if needed):
+
+- `DATABASE_URL`: the pooled Neon connection string.
+- `PUBLIC_BASE_URL`: the public app URL, for example `https://encurtador-link-web.vercel.app`.
+
+Redeploy after saving the variables. Do not commit the database connection string. Local development continues to use SQLite via `DATABASE_PATH`.
+
 ## API
 
 Create a short link with `POST /api/links`:

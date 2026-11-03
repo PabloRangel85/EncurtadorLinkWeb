@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "jsdom",
-    include: ["server/**/*.test.ts", "src/client/**/*.test.tsx"],
+    include: ["server/**/*.test.ts", "src/client/**/*.test.tsx", "api.test.ts"],
     restoreMocks: true,
     clearMocks: true,
   },
