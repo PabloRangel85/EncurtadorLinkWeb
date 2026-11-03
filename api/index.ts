@@ -4,7 +4,7 @@ import {
   createLinkHandler,
   redirectHandler,
 } from "../serverless/handlers.js";
-import { getServerlessStore } from "../serverless/sqlite-store.js";
+import { getServerlessStore } from "../serverless/memory-store.js";
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
   const route = request.query.route;
@@ -32,6 +32,6 @@ export default async function handler(request: VercelRequest, response: VercelRe
     return await redirectHandler(apiRequest, response, store);
   } catch (error) {
     console.error("Could not initialize link service", error);
-    return response.status(500).json({ error: "Could not initialize the SQLite database" });
+    return response.status(500).json({ error: "Could not initialize the in-memory link store" });
   }
 }

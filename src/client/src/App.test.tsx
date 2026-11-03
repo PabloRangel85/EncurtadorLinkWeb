@@ -108,6 +108,23 @@ describe("TinyURL dashboard", () => {
     expect(screen.queryByText("localhost:3000/r/abc123")).toBeNull();
   });
 
+  it("shows a clear message when the API returns a non-JSON server error", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response("FUNCTION_INVOCATION_FAILED", {
+        status: 500,
+        headers: { "Content-Type": "text/plain" },
+      })),
+    );
+    render(<App />);
+    fireEvent.change(screen.getByLabelText("URL longa"), {
+      target: { value: "https://example.com" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /encurtar/i }));
+
+    expect(await screen.findByText("A API falhou (HTTP 500). Confira os logs da Vercel.")).toBeTruthy();
+  });
+
   it("shows a loading state while link creation is pending", async () => {
     let resolveCreate!: (response: Response) => void;
     const pendingResponse = new Promise<Response>((resolve) => {

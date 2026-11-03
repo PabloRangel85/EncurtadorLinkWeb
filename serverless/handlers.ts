@@ -1,6 +1,6 @@
 import { randomInt } from "node:crypto";
 import type { IncomingHttpHeaders } from "node:http";
-import type { LinkStore } from "./sqlite-store.js";
+import type { LinkStore } from "./memory-store.js";
 
 interface ApiRequest {
   method?: string;

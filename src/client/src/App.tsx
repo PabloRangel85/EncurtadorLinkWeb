@@ -107,7 +107,16 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url }),
       });
-      const payload = (await response.json()) as CreateLinkResponse;
+      const responseText = await response.text();
+      let payload: CreateLinkResponse;
+      try {
+        payload = JSON.parse(responseText) as CreateLinkResponse;
+      } catch {
+        if (!response.ok) {
+          throw new Error(`A API falhou (HTTP ${response.status}). Confira os logs da Vercel.`);
+        }
+        throw new Error("A API retornou uma resposta inválida.");
+      }
       if (!response.ok) {
         throw new Error(payload.error ?? "Não foi possível encurtar este link.");
       }

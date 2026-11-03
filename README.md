@@ -21,9 +21,9 @@ For a production build, run `npm run build` followed by `npm start`. Fastify ser
 
 ## Deploy on Vercel
 
-The Vercel deployment serves the Vite interface and runs the API routes in `api/` as serverless functions. The API uses SQLite at `/tmp/tinyurl.sqlite` on Vercel, so no external database connection string is required. Set `PUBLIC_BASE_URL` in the Vercel project to the public app URL, such as `https://encurtador-link-web.vercel.app`.
+The Vercel deployment serves the Vite interface and runs the API routes in `api/` as serverless functions. Its API keeps links and click counts in memory, so no database connection string is required. Set `PUBLIC_BASE_URL` in the Vercel project to the public app URL, such as `https://encurtador-link-web.vercel.app`.
 
-Vercel's `/tmp` storage is temporary and isolated per function instance. This setup is suitable for a study/demo deployment, but links and analytics can disappear after an instance is recycled or be unavailable across instances. Local development continues to use SQLite via `DATABASE_PATH`.
+Memory is temporary and isolated per function instance. Links can disappear after an instance is recycled or be unavailable across instances. This is intended only for a study/demo deployment. Local development continues to use SQLite via `DATABASE_PATH`.
 
 ## API
 
